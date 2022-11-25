@@ -86,6 +86,9 @@ public class BluetoothSerial extends CordovaPlugin {
 
     // Android 23 requires user to explicitly grant permission for location to discover unpaired
     private static final String ACCESS_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final String ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String REQUEST_CONNECT = Manifest.permission.BLUETOOTH_CONNECT;
+    private static final String REQUEST_SCAN = Manifest.permission.BLUETOOTH_SCAN;
     private static final int CHECK_PERMISSIONS_REQ_CODE = 2;
     private CallbackContext permissionCallback;
 
@@ -106,7 +109,19 @@ public class BluetoothSerial extends CordovaPlugin {
 
         if (action.equals(LIST)) {
 
-            listBondedDevices(callbackContext);
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                if (cordova.hasPermission(REQUEST_SCAN) && cordova.hasPermission(REQUEST_CONNECT)) {
+                    listBondedDevices(callbackContext);
+                } else if (!cordova.hasPermission(REQUEST_CONNECT)) {
+                    permissionCallback = callbackContext;
+                    cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, REQUEST_CONNECT);
+                } else if (!cordova.hasPermission(REQUEST_SCAN)) {
+                    permissionCallback = callbackContext;
+                    cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, REQUEST_SCAN);
+                }
+            } else {
+                listBondedDevices(callbackContext);
+            }
 
         } else if (action.equals(CONNECT)) {
 
@@ -207,17 +222,46 @@ public class BluetoothSerial extends CordovaPlugin {
 
         } else if (action.equals(ENABLE)) {
 
-            enableBluetoothCallback = callbackContext;
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            cordova.startActivityForResult(this, intent, REQUEST_ENABLE_BLUETOOTH);
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                if (cordova.hasPermission(REQUEST_SCAN) && cordova.hasPermission(REQUEST_CONNECT)) {
+                    enableBluetoothCallback = callbackContext;
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    cordova.startActivityForResult(this, intent, REQUEST_ENABLE_BLUETOOTH);
+                } else if (!cordova.hasPermission(REQUEST_CONNECT)) {
+                    permissionCallback = callbackContext;
+                    cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, REQUEST_CONNECT);
+                } else if (!cordova.hasPermission(REQUEST_SCAN)) {
+                    permissionCallback = callbackContext;
+                    cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, REQUEST_SCAN);
+                }
+            } else {
+                enableBluetoothCallback = callbackContext;
+                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                cordova.startActivityForResult(this, intent, REQUEST_ENABLE_BLUETOOTH);
+            }
 
         } else if (action.equals(DISCOVER_UNPAIRED)) {
 
-            if (cordova.hasPermission(ACCESS_COARSE_LOCATION)) {
-                discoverUnpairedDevices(callbackContext);
-            } else {
-                permissionCallback = callbackContext;
-                cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, ACCESS_COARSE_LOCATION);
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                if (cordova.hasPermission(ACCESS_FINE_LOCATION) && cordova.hasPermission(REQUEST_SCAN) && cordova.hasPermission(REQUEST_CONNECT)) {
+                    discoverUnpairedDevices(callbackContext);
+                } else if (!cordova.hasPermission(ACCESS_FINE_LOCATION)) {
+                    permissionCallback = callbackContext;
+                    cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, ACCESS_FINE_LOCATION);
+                } else if (!cordova.hasPermission(REQUEST_CONNECT)) {
+                    permissionCallback = callbackContext;
+                    cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, REQUEST_CONNECT);
+                } else if (!cordova.hasPermission(REQUEST_SCAN)) {
+                    permissionCallback = callbackContext;
+                    cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, REQUEST_SCAN);
+                }
+            }else{
+                if (cordova.hasPermission(ACCESS_COARSE_LOCATION)) {
+                    discoverUnpairedDevices(callbackContext);
+                } else {
+                    permissionCallback = callbackContext;
+                    cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, ACCESS_COARSE_LOCATION);
+                }
             }
 
         } else if (action.equals(SET_DEVICE_DISCOVERED_LISTENER)) {
@@ -319,10 +363,27 @@ public class BluetoothSerial extends CordovaPlugin {
             }
         };
 
-        Activity activity = cordova.getActivity();
-        activity.registerReceiver(discoverReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-        activity.registerReceiver(discoverReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-        bluetoothAdapter.startDiscovery();
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            if (cordova.hasPermission(REQUEST_SCAN) && cordova.hasPermission(REQUEST_CONNECT)) {
+                Activity activity = cordova.getActivity();
+                activity.registerReceiver(discoverReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+                activity.registerReceiver(discoverReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+                bluetoothAdapter.startDiscovery();
+            } else if (!cordova.hasPermission(REQUEST_CONNECT)) {
+                permissionCallback = callbackContext;
+                cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, REQUEST_CONNECT);
+            } else if (!cordova.hasPermission(REQUEST_SCAN)) {
+                permissionCallback = callbackContext;
+                cordova.requestPermission(this, CHECK_PERMISSIONS_REQ_CODE, REQUEST_SCAN);
+            }
+        } else {
+            Activity activity = cordova.getActivity();
+            activity.registerReceiver(discoverReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            activity.registerReceiver(discoverReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+            bluetoothAdapter.startDiscovery();
+        }
+
+
     }
 
     private JSONObject deviceToJSON(BluetoothDevice device) throws JSONException {
