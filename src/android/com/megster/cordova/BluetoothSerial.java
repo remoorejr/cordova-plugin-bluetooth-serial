@@ -109,7 +109,7 @@ public class BluetoothSerial extends CordovaPlugin {
 
         if (action.equals(LIST)) {
 
-            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                 if (cordova.hasPermission(REQUEST_SCAN) && cordova.hasPermission(REQUEST_CONNECT)) {
                     listBondedDevices(callbackContext);
                 } else if (!cordova.hasPermission(REQUEST_CONNECT)) {
@@ -222,7 +222,7 @@ public class BluetoothSerial extends CordovaPlugin {
 
         } else if (action.equals(ENABLE)) {
 
-            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                 if (cordova.hasPermission(REQUEST_SCAN) && cordova.hasPermission(REQUEST_CONNECT)) {
                     enableBluetoothCallback = callbackContext;
                     Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -242,7 +242,7 @@ public class BluetoothSerial extends CordovaPlugin {
 
         } else if (action.equals(DISCOVER_UNPAIRED)) {
 
-            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
                 if (cordova.hasPermission(ACCESS_FINE_LOCATION) && cordova.hasPermission(REQUEST_SCAN) && cordova.hasPermission(REQUEST_CONNECT)) {
                     discoverUnpairedDevices(callbackContext);
                 } else if (!cordova.hasPermission(ACCESS_FINE_LOCATION)) {
@@ -363,7 +363,7 @@ public class BluetoothSerial extends CordovaPlugin {
             }
         };
 
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             if (cordova.hasPermission(REQUEST_SCAN) && cordova.hasPermission(REQUEST_CONNECT)) {
                 Activity activity = cordova.getActivity();
                 activity.registerReceiver(discoverReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
