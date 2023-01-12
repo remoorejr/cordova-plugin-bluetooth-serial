@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-bluetooth-serial",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Bluetooth Serial Communication Plugin",
   "main": "./www/bluetoothSerial.js",
   "cordova": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/don/BluetoothSerial.git"
+    "url": "git+https://github.com/remoorejr/cordova-plugin-bluetooth-serial.git"
   },
   "keywords": [
     "cordova",

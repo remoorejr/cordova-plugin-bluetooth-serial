@@ -2,29 +2,31 @@
 
 This plugin enables serial communication over Bluetooth. It was written for communicating between Android or iOS and an Arduino.
 
-Android and Windows Phone use Classic Bluetooth.  iOS uses Bluetooth Low Energy.
+Android and Windows Phone use Classic Bluetooth. iOS uses Bluetooth Low Energy.
+
+This is a fork of the original plugin and has been updated to run on Android 12.
 
 ## Supported Platforms
 
-* Android
-* iOS with [RedBearLab](http://redbearlab.com) BLE hardware, [Adafruit Bluefruit LE](http://www.adafruit.com/products/1697), [Laird BL600](http://www.lairdtech.com/Products/Embedded-Wireless-Solutions/Bluetooth-Radio-Modules/BL600-Series/#.VBI7AS5dUzI), [BlueGiga](https://bluegiga.zendesk.com/entries/29185293--BGScript-spp-over-ble-AT-command-SPP-implementation-for-BLE), or [HC-02](http://www.hc01.com/productdetail?productid=20180314021)
-* Windows Phone 8
-* Browser (Testing only. See [comments](https://github.com/don/BluetoothSerial/blob/master/src/browser/bluetoothSerial.js).)
+- Android
+- iOS with [RedBearLab](http://redbearlab.com) BLE hardware, [Adafruit Bluefruit LE](http://www.adafruit.com/products/1697), [Laird BL600](http://www.lairdtech.com/Products/Embedded-Wireless-Solutions/Bluetooth-Radio-Modules/BL600-Series/#.VBI7AS5dUzI), [BlueGiga](https://bluegiga.zendesk.com/entries/29185293--BGScript-spp-over-ble-AT-command-SPP-implementation-for-BLE), or [HC-02](http://www.hc01.com/productdetail?productid=20180314021)
+- Windows Phone 8
+- Browser (Testing only. See [comments](https://github.com/don/BluetoothSerial/blob/master/src/browser/bluetoothSerial.js).)
 
 [Supporting other Bluetooth Low Energy hardware](#supporting-other-ble-hardware)
 
 ## Limitations
 
- * The phone must initiate the Bluetooth connection
- * iOS Bluetooth Low Energy requires iPhone 4S, iPhone5, iPod 5, or iPad3+
- * Will *not* connect Android to Android[*](https://github.com/don/BluetoothSerial/issues/50#issuecomment-66405396)
- * Will *not* connect iOS to iOS[*](https://github.com/don/BluetoothSerial/issues/75#issuecomment-52591397)
+- The phone must initiate the Bluetooth connection
+- iOS Bluetooth Low Energy requires iPhone 4S, iPhone5, iPod 5, or iPad3+
+- Will _not_ connect Android to Android[\*](https://github.com/don/BluetoothSerial/issues/50#issuecomment-66405396)
+- Will _not_ connect iOS to iOS[\*](https://github.com/don/BluetoothSerial/issues/75#issuecomment-52591397)
 
 # Installing
 
 Install with Cordova cli
 
-    $ cordova plugin add cordova-plugin-bluetooth-serial
+    $ cordova plugin add https://remoorejr/cordova-plugin-bluetooth-serial.git
 
 Note that this plugin's id changed from `com.megster.cordova.bluetoothserial` to `cordova-plugin-bluetooth-serial` as part of the migration from the [Cordova plugin repo](http://plugins.cordova.io/) to [npm](https://www.npmjs.com/).
 
@@ -68,23 +70,25 @@ Connect to a Bluetooth device.
 
 ### Description
 
-Function `connect` connects to a Bluetooth device.  The callback is long running.  Success will be called when the connection is successful.  Failure is called if the connection fails, or later if the connection disconnects. An error message is passed to the failure callback.
+Function `connect` connects to a Bluetooth device. The callback is long running. Success will be called when the connection is successful. Failure is called if the connection fails, or later if the connection disconnects. An error message is passed to the failure callback.
 
 #### Android
+
 For Android, `connect` takes a MAC address of the remote device.
 
 #### iOS
-For iOS, `connect` takes the UUID of the remote device.  Optionally, you can pass an **empty string** and the plugin will connect to the first BLE peripheral.
+
+For iOS, `connect` takes the UUID of the remote device. Optionally, you can pass an **empty string** and the plugin will connect to the first BLE peripheral.
 
 #### Windows Phone
-For Windows Phone, `connect` takes a MAC address of the remote device. The MAC address can optionally surrounded with parenthesis. e.g. `(AA:BB:CC:DD:EE:FF)`
 
+For Windows Phone, `connect` takes a MAC address of the remote device. The MAC address can optionally surrounded with parenthesis. e.g. `(AA:BB:CC:DD:EE:FF)`
 
 ### Parameters
 
-- __macAddress_or_uuid__: Identifier of the remote device.
-- __connectSuccess__: Success callback function that is invoked when the connection is successful.
-- __connectFailure__: Error callback function, invoked when error occurs or the connection disconnects.
+- **macAddress_or_uuid**: Identifier of the remote device.
+- **connectSuccess**: Success callback function that is invoked when the connection is successful.
+- **connectFailure**: Error callback function, invoked when error occurs or the connection disconnects.
 
 ## connectInsecure
 
@@ -94,23 +98,25 @@ Connect insecurely to a Bluetooth device.
 
 ### Description
 
-Function `connectInsecure` works like [connect](#connect), but creates an insecure connection to a Bluetooth device.  See the [Android docs](http://goo.gl/1mFjZY) for more information.
+Function `connectInsecure` works like [connect](#connect), but creates an insecure connection to a Bluetooth device. See the [Android docs](http://goo.gl/1mFjZY) for more information.
 
 #### Android
+
 For Android, `connectInsecure` takes a macAddress of the remote device.
 
 #### iOS
+
 `connectInsecure` is **not supported** on iOS.
 
 #### Windows Phone
+
 `connectInsecure` is **not supported** on Windows Phone.
 
 ### Parameters
 
-- __macAddress__: Identifier of the remote device.
-- __connectSuccess__: Success callback function that is invoked when the connection is successful.
-- __connectFailure__: Error callback function, invoked when error occurs or the connection disconnects.
-
+- **macAddress**: Identifier of the remote device.
+- **connectSuccess**: Success callback function that is invoked when the connection is successful.
+- **connectFailure**: Error callback function, invoked when error occurs or the connection disconnects.
 
 ## disconnect
 
@@ -124,8 +130,8 @@ Function `disconnect` disconnects the current connection.
 
 ### Parameters
 
-- __success__: Success callback function that is invoked after the connection is disconnected. [optional]
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked after the connection is disconnected. [optional]
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ## write
 
@@ -141,9 +147,9 @@ Internally string, integer array, and Uint8Array are converted to an ArrayBuffer
 
 ### Parameters
 
-- __data__: ArrayBuffer of data
-- __success__: Success callback function that is invoked when the connection is successful. [optional]
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **data**: ArrayBuffer of data
+- **success**: Success callback function that is invoked when the connection is successful. [optional]
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -172,12 +178,12 @@ Gets the number of bytes of data available.
 
 ### Description
 
-Function `available` gets the number of bytes of data available.  The bytes are passed as a parameter to the success callback.
+Function `available` gets the number of bytes of data available. The bytes are passed as a parameter to the success callback.
 
 ### Parameters
 
-- __success__: Success callback function that is invoked when the connection is successful. [optional]
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked when the connection is successful. [optional]
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -193,12 +199,12 @@ Reads data from the buffer.
 
 ### Description
 
-Function `read` reads the data from the buffer. The data is passed to the success callback as a String.  Calling `read` when no data is available will pass an empty String to the callback.
+Function `read` reads the data from the buffer. The data is passed to the success callback as a String. Calling `read` when no data is available will pass an empty String to the callback.
 
 ### Parameters
 
-- __success__: Success callback function that is invoked with the number of bytes available to be read.
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked with the number of bytes available to be read.
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -214,13 +220,13 @@ Reads data from the buffer until it reaches a delimiter.
 
 ### Description
 
-Function `readUntil` reads the data from the buffer until it reaches a delimiter.  The data is passed to the success callback as a String.  If the buffer does not contain the delimiter, an empty String is passed to the callback. Calling `read` when no data is available will pass an empty String to the callback.
+Function `readUntil` reads the data from the buffer until it reaches a delimiter. The data is passed to the success callback as a String. If the buffer does not contain the delimiter, an empty String is passed to the callback. Calling `read` when no data is available will pass an empty String to the callback.
 
 ### Parameters
 
-- __delimiter__: delimiter
-- __success__: Success callback function that is invoked with the data.
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **delimiter**: delimiter
+- **success**: Success callback function that is invoked with the data.
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -236,13 +242,13 @@ Subscribe to be notified when data is received.
 
 ### Description
 
-Function `subscribe` registers a callback that is called when data is received.  A delimiter must be specified.  The callback is called with the data as soon as the delimiter string is read.  The callback is a long running callback and will exist until `unsubscribe` is called.
+Function `subscribe` registers a callback that is called when data is received. A delimiter must be specified. The callback is called with the data as soon as the delimiter string is read. The callback is a long running callback and will exist until `unsubscribe` is called.
 
 ### Parameters
 
-- __delimiter__: delimiter
-- __success__: Success callback function that is invoked with the data.
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **delimiter**: delimiter
+- **success**: Success callback function that is invoked with the data.
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -263,8 +269,8 @@ Function `unsubscribe` removes any notification added by `subscribe` and kills t
 
 ### Parameters
 
-- __success__: Success callback function that is invoked when the connection is successful. [optional]
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked when the connection is successful. [optional]
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -282,8 +288,8 @@ Function `subscribeRawData` registers a callback that is called when data is rec
 
 ### Parameters
 
-- __success__: Success callback function that is invoked with the data.
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked with the data.
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -305,8 +311,8 @@ Function `unsubscribeRawData` removes any notification added by `subscribeRawDat
 
 ### Parameters
 
-- __success__: Success callback function that is invoked when the connection is successful. [optional]
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked when the connection is successful. [optional]
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -324,8 +330,8 @@ Function `clear` removes any data from the receive buffer.
 
 ### Parameters
 
-- __success__: Success callback function that is invoked when the connection is successful. [optional]
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked when the connection is successful. [optional]
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ## list
 
@@ -337,9 +343,9 @@ Lists bonded devices
 
 #### Android
 
-Function `list` lists the paired Bluetooth devices.  The success callback is called with a list of objects.
+Function `list` lists the paired Bluetooth devices. The success callback is called with a list of objects.
 
-Example list passed to success callback.  See [BluetoothDevice](http://developer.android.com/reference/android/bluetooth/BluetoothDevice.html#getName\(\)) and [BluetoothClass#getDeviceClass](http://developer.android.com/reference/android/bluetooth/BluetoothClass.html#getDeviceClass\(\)).
+Example list passed to success callback. See [BluetoothDevice](<http://developer.android.com/reference/android/bluetooth/BluetoothDevice.html#getName()>) and [BluetoothClass#getDeviceClass](<http://developer.android.com/reference/android/bluetooth/BluetoothClass.html#getDeviceClass()>).
 
     [{
         "class": 276,
@@ -355,7 +361,7 @@ Example list passed to success callback.  See [BluetoothDevice](http://developer
 
 #### iOS
 
-Function `list` lists the discovered Bluetooth Low Energy peripheral.  The success callback is called with a list of objects.
+Function `list` lists the discovered Bluetooth Low Energy peripheral. The success callback is called with a list of objects.
 
 Example list passed to success callback for iOS.
 
@@ -370,7 +376,7 @@ The advertised RSSI **may** be included if available.
 
 #### Windows Phone
 
-Function `list` lists the paired Bluetooth devices.  The success callback is called with a list of objects.
+Function `list` lists the paired Bluetooth devices. The success callback is called with a list of objects.
 
 Example list passed to success callback for Windows Phone.
 
@@ -388,8 +394,8 @@ Example list passed to success callback for Windows Phone.
 
 ### Parameters
 
-- __success__: Success callback function that is invoked with a list of bonded devices.
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked with a list of bonded devices.
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -407,12 +413,12 @@ Reports the connection status.
 
 ### Description
 
-Function `isConnected` calls the success callback when connected to a peer and the failure callback when *not* connected.
+Function `isConnected` calls the success callback when connected to a peer and the failure callback when _not_ connected.
 
 ### Parameters
 
-- __success__: Success callback function, invoked when device connected.
-- __failure__: Error callback function, invoked when device is NOT connected.
+- **success**: Success callback function, invoked when device connected.
+- **failure**: Error callback function, invoked when device is NOT connected.
 
 ### Quick Example
 
@@ -433,12 +439,12 @@ Reports if bluetooth is enabled.
 
 ### Description
 
-Function `isEnabled` calls the success callback when bluetooth is enabled and the failure callback when bluetooth is *not* enabled.
+Function `isEnabled` calls the success callback when bluetooth is enabled and the failure callback when bluetooth is _not_ enabled.
 
 ### Parameters
 
-- __success__: Success callback function, invoked when Bluetooth is enabled.
-- __failure__: Error callback function, invoked when Bluetooth is NOT enabled.
+- **success**: Success callback function, invoked when Bluetooth is enabled.
+- **failure**: Error callback function, invoked when Bluetooth is NOT enabled.
 
 ### Quick Example
 
@@ -461,12 +467,12 @@ Reads the RSSI from the connected peripheral.
 
 Function `readRSSI` calls the success callback with the rssi.
 
-**BLE only** *This function is experimental and the API may change*
+**BLE only** _This function is experimental and the API may change_
 
 ### Parameters
 
-- __success__: Success callback function that is invoked with the rssi value.
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked with the rssi value.
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -492,8 +498,8 @@ Function `showBluetoothSettings` opens the Bluetooth settings on the operating s
 
 ### Parameters
 
-- __success__: Success callback function [optional]
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function [optional]
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -517,8 +523,8 @@ If `enable` is called when Bluetooth is already enabled, the user will not promp
 
 ### Parameters
 
-- __success__: Success callback function, invoked if the user enabled Bluetooth.
-- __failure__: Error callback function, invoked if the user does not enabled Bluetooth.
+- **success**: Success callback function, invoked if the user enabled Bluetooth.
+- **failure**: Error callback function, invoked if the user does not enabled Bluetooth.
 
 ### Quick Example
 
@@ -572,8 +578,8 @@ Calling `connect` on an unpaired Bluetooth device should begin the Android pairi
 
 ### Parameters
 
-- __success__: Success callback function that is invoked with a list of unpaired devices.
-- __failure__: Error callback function, invoked when error occurs. [optional]
+- **success**: Success callback function that is invoked with a list of unpaired devices.
+- **failure**: Error callback function, invoked when error occurs. [optional]
 
 ### Quick Example
 
@@ -604,12 +610,12 @@ See [discoverUnpaired](#discoverunpaired).
 
 ### Parameters
 
-- __notify__: Notify callback function that is invoked when device is discovered during discovery process.
+- **notify**: Notify callback function that is invoked when device is discovered during discovery process.
 
 ### Quick Example
 
     bluetoothSerial.setDeviceDiscoveredListener(function(device) {
-		console.log('Found: '+device.id);
+    	console.log('Found: '+device.id);
     });
 
 ## clearDeviceDiscoveredListener
@@ -627,17 +633,20 @@ Sets the human readable device name that is broadcasted to other devices.
     bluetoothSerial.setName(newName);
 
 #### Android
+
 For Android, `setName` takes a String for the new name.
 
 #### iOS
+
 Not currently implemented.
 
 #### Windows Phone
+
 Not currently implemented.
 
 ### Parameters
 
-- __newName__: Desired name of device.
+- **newName**: Desired name of device.
 
 ### Quick Example
 
@@ -650,17 +659,20 @@ Makes the device discoverable by other devices.
     bluetoothSerial.setDiscoverable(discoverableDuration);
 
 #### Android
+
 For Android, `setDiscoverable` takes an int for the number of seconds device should be discoverable. A time of 0 will make it permanently discoverable.
 
 #### iOS
+
 Not currently implemented.
 
 #### Windows Phone
+
 Not currently implemented.
 
 ### Parameters
 
-- __discoverableDuration__: Desired number of seconds device should be discoverable for.
+- **discoverableDuration**: Desired number of seconds device should be discoverable for.
 
 ### Quick Example
 
@@ -672,14 +684,15 @@ Not currently implemented.
 
 ### Android
 
-Current development is done with Cordova 4.2 on Android 5. Theoretically this code runs on PhoneGap 2.9 and greater.  It should support Android-10 (2.3.2) and greater, but I only test with Android 4.x+.
+Current development is done with Cordova 4.2 on Android 5. Theoretically this code runs on PhoneGap 2.9 and greater. It should support Android-10 (2.3.2) and greater, but I only test with Android 4.x+.
 
 Development Devices include
- * Nexus 5 with Android 5
- * Samsung Galaxy Tab 10.1 (GT-P7510) with Android 4.0.4 (see [Issue #8](https://github.com/don/BluetoothSerial/issues/8))
- * Google Nexus S with Android 4.1.2
- * Nexus 4 with Android 5
- * Samsung Galaxy S4 with Android 4.3
+
+- Nexus 5 with Android 5
+- Samsung Galaxy Tab 10.1 (GT-P7510) with Android 4.0.4 (see [Issue #8](https://github.com/don/BluetoothSerial/issues/8))
+- Google Nexus S with Android 4.1.2
+- Nexus 4 with Android 5
+- Samsung Galaxy S4 with Android 4.3
 
 On the Arduino side I test with [Sparkfun Mate Silver](https://www.sparkfun.com/products/10393) and the [Seeed Studio Bluetooth Shield](http://www.seeedstudio.com/depot/bluetooth-shield-p-866.html?cPath=19_21). The code should be generic and work with most hardware.
 
@@ -724,7 +737,8 @@ If you need generic Bluetooth Low Energy support checkout my [Cordova BLE Plugin
 If you need BLE for RFduino checkout my [RFduino Plugin](https://github.com/don/cordova-plugin-rfduino).
 
 ## What format should the Mac Address be in?
-An example a properly formatted mac address is ``AA:BB:CC:DD:EE:FF``
+
+An example a properly formatted mac address is `AA:BB:CC:DD:EE:FF`
 
 ## Feedback
 
